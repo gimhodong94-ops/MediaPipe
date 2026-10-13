@@ -17,6 +17,8 @@ segmenter = mp_selfie.SelfieSegmentation(model_selection=1)
 # =========================================
 # cap = cv2.VideoCapture(0)
 cap = cv2.VideoCapture("face.mp4")  # 파일로 테스트 시
+fps = cap.get(cv2.CAP_PROP_FPS)
+frame_delay = max(1, round(1000 / fps)) if fps > 0 else 1
 
 print("📷 Selfie Segmentation 시작 — ESC를 눌러 종료합니다.")
 
@@ -42,7 +44,7 @@ while cap.isOpened():
     mask = (result.segmentation_mask > 0.5).astype(np.uint8)
 
     # 배경 블러 생성
-    blur = cv2.GaussianBlur(frame, (31, 31), 0)
+    blur = cv2.GaussianBlur(frame, (99, 99), 0)
 
     # 전경/배경 합성
     output = frame * mask[..., None] + blur * (1 - mask[..., None])
@@ -52,7 +54,7 @@ while cap.isOpened():
     cv2.imshow("🪞 Selfie Segmentation (ESC to quit)", output)
 
     # ESC 키로 종료
-    if cv2.waitKey(1) & 0xFF == 27:
+    if cv2.waitKey(frame_delay) & 0xFF == 27:
         print("👋 종료합니다.")
         break
 
