@@ -1,0 +1,11 @@
+# 가상환경 폴더
+.venv/
+venv/
+
+# 파이썬 캐시 파일
+__pycache__/
+*.pyc
+
+# 특정 폴더 및 파일 제외
+face.mp4
+hand.mp4
